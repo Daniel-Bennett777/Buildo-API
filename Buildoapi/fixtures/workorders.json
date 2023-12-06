@@ -1,0 +1,17 @@
+[
+    {
+      "model": "your_app_name.workorder",
+      "pk": 1,
+      "fields": {
+        "service_type": "Your Service Type",
+        "state_name": "Tennessee",
+        "county_name": "Shelby",
+        "date_posted": "2023-12-06T12:00:00Z",  
+        "customer": 1,  
+        "contractor": null,
+        "status": 2, 
+        "description": "This is my kitchen. Definitely outdated as you can see. We need someone experienced in Residential construction please! ",
+        "profile_image_url": "https://media.istockphoto.com/id/1363882276/photo/kitchenette.jpg?s=612x612&w=0&k=20&c=u3u7r4fv67KEM7vcV5eT3ma1VmBqfjmMXz4wU-mY-Vw="
+      }
+    }
+  ]

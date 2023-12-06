@@ -1,0 +1,16 @@
+[
+    {
+      "model": "Buildoapi.status",
+      "pk": 1,
+      "fields": {
+        "status": "view-only"
+      }
+    },
+    {
+      "model": "Buildoapi.status",
+      "pk": 2,
+      "fields": {
+        "status": "accepting-responses"
+      }
+    }
+  ]

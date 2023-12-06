@@ -1,0 +1,14 @@
+[
+    {
+      "model": "Buildoapi.review",
+      "pk": 1,
+      "fields": {
+        "customer": 1,  
+        "contractor": 2,
+        "rating": 5,  
+        "comment": "Finished my bathroom Remodel! Cant say enough about how well Meg did on this tile work. 100% recommend",
+        "date_posted": "2023-12-06T12:00:00Z",
+        "profile_image_url": "https://images.unsplash.com/photo-1613688684111-5c197974be20?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhdGhyb29tJTIwcmVub3ZhdGlvbnxlbnwwfHwwfHx8MA%3D%3D" 
+      }
+    }
+]
