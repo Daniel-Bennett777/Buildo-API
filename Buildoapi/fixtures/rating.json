@@ -1,0 +1,42 @@
+[
+    {
+      "model": "Buildoapi.rating",
+      "pk": 1,
+      "fields": {
+        "value": 1,
+        "description": "Poor"
+      }
+    },
+    {
+      "model": "Buildoapi.rating",
+      "pk": 2,
+      "fields": {
+        "value": 2,
+        "description": "Fair"
+      }
+    },
+    {
+      "model": "Buildoapi.rating",
+      "pk": 3,
+      "fields": {
+        "value": 3,
+        "description": "Average"
+      }
+    },
+    {
+      "model": "Builoapi.rating",
+      "pk": 4,
+      "fields": {
+        "value": 4,
+        "description": "Good"
+      }
+    },
+    {
+      "model": "Buildoapi.rating",
+      "pk": 5,
+      "fields": {
+        "value": 5,
+        "description": "Excellent"
+      }
+    }
+  ]
