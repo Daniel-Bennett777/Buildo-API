@@ -1,6 +1,6 @@
 [
     {
-      "model": "your_app_name.workorder",
+      "model": "Buildoapi.workorder",
       "pk": 1,
       "fields": {
         "service_type": "Your Service Type",
