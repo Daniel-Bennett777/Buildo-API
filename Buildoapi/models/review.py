@@ -3,8 +3,8 @@ from .users import RareUser
 from .rating import Rating
 
 class Review(models.Model):
-    customer = models.ForeignKey(RareUser, on_delete=models.CASCADE, related_name='work_orders_posted')
-    contractor = models.ForeignKey(RareUser, on_delete=models.SET_NULL, null=True, related_name='work_orders_accepted')
+    customer = models.ForeignKey(RareUser, on_delete=models.CASCADE, related_name='work_orders_customer')
+    contractor = models.ForeignKey(RareUser, on_delete=models.SET_NULL, null=True, related_name='work_orders_contractor')
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE)
     comment = models.TextField()
     date_posted = models.DateTimeField()

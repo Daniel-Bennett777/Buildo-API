@@ -24,7 +24,7 @@
       }
     },
     {
-      "model": "Builoapi.rating",
+      "model": "Buildoapi.rating",
       "pk": 4,
       "fields": {
         "value": 4,
