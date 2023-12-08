@@ -1,14 +1,14 @@
 from django.db import models
-from .users import RareUser
+from .user import RareUser
 from .rating import Rating
 
 class Review(models.Model):
-    customer = models.ForeignKey(RareUser, on_delete=models.CASCADE, related_name='work_orders_customer')
-    contractor = models.ForeignKey(RareUser, on_delete=models.SET_NULL, null=True, related_name='work_orders_contractor')
+    customer = models.ForeignKey(RareUser, on_delete=models.CASCADE, related_name='customer_reviews')
+    contractor = models.ForeignKey(RareUser, on_delete=models.SET_NULL, null=True, related_name='contractor_reviews')
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE)
     comment = models.TextField()
-    date_posted = models.DateTimeField()
-    profile_image_url = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=155)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    profile_image_url = models.URLField(max_length=255) 
     
 
     def __str__(self):
