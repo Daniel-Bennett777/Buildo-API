@@ -7,7 +7,7 @@
         "profile_image_url": "https://img.freepik.com/free-photo/portrait-handsome-man-with-dark-hairstyle-bristle-toothy-smile-dressed-white-sweatshirt-feels-very-glad-poses-indoor-pleased-european-guy-being-good-mood-smiles-positively-emotions-concept_273609-61405.jpg?size=626&ext=jpg&ga=GA1.2.1688039518.1694962551&semt=sph",
         "created_on": "2021-11-17",
         "active": "True",
-        "user": "1",
+        "user": 1,
         "state_name": "Tennessee",
         "county_name": "Shelby",
         "is_contractor": false
@@ -21,7 +21,7 @@
         "profile_image_url": "https://img.freepik.com/free-photo/close-up-shot-pretty-woman-with-perfect-teeth-dark-clean-skin-having-rest-indoors-smiling-happily-after-received-good-positive-news_273609-1248.jpg?size=626&ext=jpg&ga=GA1.2.1688039518.1694962551&semt=sph",
         "created_on": "2021-10-17",
         "active": "True",
-        "user": "2",
+        "user": 2,
         "state_name": "Tennessee",
         "county_name": "Shelby",
         "is_contractor": true
@@ -35,7 +35,7 @@
         "profile_image_url": "https://img.freepik.com/premium-photo/portrait-beautiful-positive-african-american-woman-yellow-studio_93675-137589.jpg?size=626&ext=jpg&ga=GA1.2.1688039518.1694962551&semt=sph",
         "created_on": "2021-09-17",
         "active": "True",
-        "user": "3",
+        "user": 3,
         "state_name": "Tennessee",
         "county_name": "Dickson",
         "is_contractor": false
@@ -49,7 +49,7 @@
         "profile_image_url": "https://img.freepik.com/free-photo/handsome-young-cheerful-man_171337-1155.jpg?size=626&ext=jpg&ga=GA1.1.1688039518.1694962551&semt=sph",
         "created_on": "2023-11-28",
         "active": "True",
-        "user": "4",
+        "user": 4,
         "state_name": "Tennessee",
         "county_name": "Dickson",
         "is_contractor": true
@@ -59,11 +59,11 @@
         "model": "Buildoapi.rareuser",
         "pk": 5,
         "fields": {
-          "bio": "I love people and places to visit ",
+          "bio": "I love people and places to visit. ",
           "profile_image_url": "https://img.freepik.com/free-photo/young-beautiful-woman-looking-camera-trendy-girl-casual-summer-white-t-shirt-jeans-shorts-positive-female-shows-facial-emotions-funny-model-isolated-yellow_158538-15796.jpg?size=626&ext=jpg&ga=GA1.1.1688039518.1694962551&semt=sph",
           "created_on": "2023-11-28",
           "active": "True",
-          "user": "5",
+          "user": 5,
           "state_name": "Tennessee",
           "county_name": "Davidson",
           "is_contractor": false
@@ -73,11 +73,11 @@
         "model": "Buildoapi.rareuser",
         "pk": 6,
         "fields": {
-          "bio": "I love people and places to visit ",
-          "profile_image_url": "https://img.freepik.com/free-photo/young-beautiful-woman-looking-camera-trendy-girl-casual-summer-white-t-shirt-jeans-shorts-positive-female-shows-facial-emotions-funny-model-isolated-yellow_158538-15796.jpg?size=626&ext=jpg&ga=GA1.1.1688039518.1694962551&semt=sph",
+          "bio": "My favorite places are free.",
+          "profile_image_url": "https://img.freepik.com/free-photo/smiley-man-relaxing-outdoors_23-2148739334.jpg?size=626&ext=jpg&ga=GA1.1.1688039518.1694962551&semt=sph",
           "created_on": "2023-11-28",
           "active": "True",
-          "user": "6",
+          "user": 6,
           "state_name": "Tennessee",
           "county_name": "Davidson",
           "is_contractor": false
