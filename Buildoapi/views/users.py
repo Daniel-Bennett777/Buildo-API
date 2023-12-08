@@ -8,10 +8,11 @@ from django.contrib.auth.models import User
 from Buildoapi.models.user import RareUser
 from .rareusers import RareUserSerializer
 
+# Define UserSerializer separately
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'password')  # add other fields as needed
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'password')  
         extra_kwargs = {'password': {'write_only': True}}
 
 class UserViewSet(viewsets.ViewSet):
@@ -22,7 +23,6 @@ class UserViewSet(viewsets.ViewSet):
     def register_account(self, request):
         user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
-            # Create the User instance
             user = User.objects.create_user(
                 username=user_serializer.validated_data['username'],
                 first_name=user_serializer.validated_data.get('first_name', ''),
@@ -31,68 +31,77 @@ class UserViewSet(viewsets.ViewSet):
                 password=user_serializer.validated_data['password']
             )
             
-            # Create Token for the User
+            rare_user = RareUser.objects.create(
+                bio=request.data.get('bio', ''),
+                profile_image_url=request.data.get('profile_image_url', ''),
+                state_name=request.data.get('state_name', ''),
+                county_name=request.data.get('county_name', ''),
+                is_contractor=request.data.get('is_contractor', False),
+                user=user
+            )
             token, created = Token.objects.get_or_create(user=user)
 
             data = {
                 'valid': True,
                 'token': token.key,
                 'staff': token.user.is_staff,
-                'id': token.user.id
+                'id': token.user.id,
+                'first_name': token.user.first_name,
+                'last_name': token.user.last_name,
+                'username': token.user.username,
+                'email': token.user.email,
+                'bio': rare_user.bio,
+                'profile_image_url': rare_user.profile_image_url,
+                'state_name': rare_user.state_name,
+                'county_name': rare_user.county_name,
+                'is_contractor': rare_user.is_contractor,
             }
 
-            # Create the RareUser instance
-            rare_user =  RareUser.objects.create(
-                bio = request.data.get('bio', ''),
-                profile_image_url = request.data.get('profile_image_url', ''),
-                state_name = request.data.get('state_name', ''),
-                county_name = request.data.get('county_name', ''),
-                is_contractor = request.data.get('is_contractor', False),
-                user = user
-            )
-            
-            
-            rare_user_data = RareUserSerializer(rare_user, context={"request": request}).data
-
-            if rare_user_data:  # Check if serialization is successful
+            rare_user_serializer = RareUserSerializer(data=request.data, context={"request": request})
+            if rare_user_serializer.is_valid():
                 return Response(data, status=status.HTTP_201_CREATED)
 
-
-
-            # If RareUser creation fails, delete the user and return an error response
-            
             user.delete()
             return Response({'error': 'Failed to serialize RareUser'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     @action(detail=False, methods=['post'], url_path='login')
     def login_user(self, request):
-        '''Handles the authentication of a user
-
-        Method arguments:
-        request -- The full HTTP request object
-        '''
         username = request.data['username']
         password = request.data['password']
 
-        # Use the built-in authenticate method to verify
-        # authenticate returns the user object or None if no user is found
         authenticated_user = authenticate(username=username, password=password)
 
-        # If authentication was successful, respond with their token
         if authenticated_user is not None:
             token = Token.objects.get(user=authenticated_user)
+
+        # Access the associated RareUser instance for the authenticated user
+            try:
+                rare_user = RareUser.objects.get(user=authenticated_user)
+                rare_user_data = {
+                    'bio': rare_user.bio,
+                    'profile_image_url': rare_user.profile_image_url,
+                    'state_name': rare_user.state_name,
+                    'county_name': rare_user.county_name,
+                    'is_contractor': rare_user.is_contractor,
+                }
+            except RareUser.DoesNotExist:
+                rare_user_data = {}
 
             data = {
                 'valid': True,
                 'token': token.key,
                 'staff': token.user.is_staff,
-                'id': token.user.id
+                'id': token.user.id,
+                'first_name': token.user.first_name,
+                'last_name': token.user.last_name,
+                'username': token.user.username,
+                'email': token.user.email,
+                'rare_user': rare_user_data,
             }
+
             return Response(data)
         else:
-            # Bad login details were provided. So we can't log the user in.
-            data = { 'valid': False }
-            return Response(data)
+            data = {'valid': False, 'error': 'Invalid username or password'}
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
