@@ -81,3 +81,46 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
 
         except Exception as ex:
             return Response({"message": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self,request, pk=None):
+        """Handle DELETE requests for a single post
+
+        Returns:
+            Response -- empty response body
+        """
+        try:
+            work_order = WorkOrder.objects.get(pk=pk)
+            if work_order.customer.user_id == request.user.id:
+                work_order.delete()
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
+            return Response({"message": "You are not the author of this post."}, status=status.HTTP_403_FORBIDDEN)
+        except WorkOrder.DoesNotExist as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def update(self,request, pk=None):
+        """Handle PUT requests for a single post
+
+        Returns:
+            Response -- JSON serialized object
+        """
+        try:
+            work_order = WorkOrder.objects.get(pk=pk)
+
+            if work_order.customer.user_id == request.user.id:
+                serializer = WorkOrderSerializer(data=request.data, partial=True)
+                if serializer.is_valid():
+
+                    work_order.status = Status.objects.get(pk=request.data["status"]["id"])
+                    work_order.service_type = serializer.validated_data["service_type"]
+                    work_order.state_name = serializer.validated_data["state_name"]
+                    work_order.county_name = serializer.validated_data["county_name"]
+                    work_order.description = serializer.validated_data["description"]
+                    work_order.profile_image_url = serializer.validated_data["profile_image_url"]
+                    # Save the changes to the work_order instance
+                    work_order.save()
+                    serializer = WorkOrderSerializer(work_order, context={"request": request})
+                    return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "You are not the author of this Order."}, status=status.HTTP_403_FORBIDDEN)
+        except WorkOrder.DoesNotExist as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
