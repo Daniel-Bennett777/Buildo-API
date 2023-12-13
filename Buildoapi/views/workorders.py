@@ -1,12 +1,23 @@
 from rest_framework import viewsets, permissions, serializers, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from Buildoapi.models.work_order import WorkOrder
 from Buildoapi.models.status import Status
 from Buildoapi.models.user import RareUser
 from django.utils import timezone
 from Buildoapi.views.rareusers import RareUserSerializer
+class IsContractor(permissions.BasePermission):
+    """
+    Custom permission to only allow contractors to perform certain actions.
+    """
 
+    def has_permission(self, request, view):
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return False
+
+        # Check if the user is a contractor
+        return request.user.rareuser.is_contractor
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
@@ -54,6 +65,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
         Returns
             Response -- JSON serialized work order instance
         """
+    
         try:
             # Extract data from the request
             data = {
@@ -62,15 +74,12 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
                 "county_name": request.data.get("county_name"),
                 "description": request.data.get("description"),
                 "profile_image_url": request.data.get("profile_image_url"),
+                "status": Status.objects.get(id=request.data.get("status"))
                 # Add other fields as needed
             }
 
             rare_user = RareUser.objects.get(user=request.user.id)
             data["customer"] = rare_user  # Assign the RareUser instance directly
-
-            # Set the status information
-            status_instance = Status.objects.get(id=request.data.get("status"))
-            data["status"] = status_instance  # Assign the Status instance directly
 
             # Create a WorkOrder instance
             work_order = WorkOrder.objects.create(**data)
@@ -124,3 +133,24 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             return Response({"message": "You are not the author of this Order."}, status=status.HTTP_403_FORBIDDEN)
         except WorkOrder.DoesNotExist as ex:
             return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+    @action(detail=True, methods=['post'])
+    @permission_classes([IsContractor])
+    def accept_job(self, request, pk=None):
+        try:
+            work_order = WorkOrder.objects.get(pk=pk)
+            contractor = RareUser.objects.get(user=request.user.id)
+
+            if contractor.is_contractor is True:  # Ensure the job is not already accepted
+                work_order.contractor = contractor
+                in_progress_status = Status.objects.get(status='in-progress') # Update the status
+                work_order.status = in_progress_status
+                work_order.save()
+
+                serializer = WorkOrderSerializer(work_order, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({"message": "Only contractors can accept jobs."}, status=status.HTTP_403_FORBIDDEN)
+        except WorkOrder.DoesNotExist as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except Status.DoesNotExist:
+            return Response({"message": "Status 'accepting-responses' not found."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

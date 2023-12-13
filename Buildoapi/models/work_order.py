@@ -13,5 +13,9 @@ class WorkOrder(models.Model):
     description = models.TextField()
     profile_image_url = models.URLField(max_length=355) 
 
+    def set_in_progress_status(self):
+        in_progress_status = Status.objects.get(status='in-progress')
+        self.status = in_progress_status
+        self.save()
     def __str__(self):
         return f"WorkOrder {self.pk}: {self.service_type} - {self.state_name} - {self.county_name} - {self.date_posted}"
