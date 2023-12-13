@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.urls import include, path
 from Buildoapi.views.users import UserViewSet
 from Buildoapi.views.workorders import WorkOrderViewSet
+from Buildoapi.views.reviews import ReviewViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'work_orders', WorkOrderViewSet,"work_order")
+router.register(r'reviews', ReviewViewSet,'review')
 
 urlpatterns = [
     path('', include(router.urls)),

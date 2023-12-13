@@ -12,5 +12,19 @@
       "fields": {
         "status": "accepting-responses"
       }
+    },
+    {
+      "model": "Buildoapi.status", 
+      "pk": 3, 
+      "fields": {
+        "status": "in-progress"
+      }
+    },
+    {
+      "model": "Buildoapi.status", 
+      "pk": 4, 
+      "fields": {
+        "status": "Complete"
+      }
     }
   ]
