@@ -10,3 +10,4 @@ class RareUser(models.Model):
     state_name = models.CharField(max_length=20)
     county_name = models.CharField(max_length=20)
     is_contractor = models.BooleanField(default=False)
+    qualifications = models.TextField(blank=True, null=True)

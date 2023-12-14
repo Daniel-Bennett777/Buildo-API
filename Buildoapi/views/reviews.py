@@ -81,6 +81,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
                 contractor_id = work_order.contractor_id
                 customer = RareUser.objects.get(pk=customer_id)
                 contractor = RareUser.objects.get(pk=contractor_id)
+                 # Check if the customer has already reviewed the contractor
+                existing_review = Review.objects.filter(customer=customer, contractor=contractor).exists()
+                if existing_review:
+                    return Response({'message': 'You have already reviewed this contractor.'}, status=status.HTTP_400_BAD_REQUEST)
                 rating_value = request.data.get('rating')
                 rating = Rating.objects.get(value=rating_value)
                 # Use these values to create the review

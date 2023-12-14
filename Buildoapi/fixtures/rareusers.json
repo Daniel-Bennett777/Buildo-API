@@ -24,7 +24,8 @@
         "user": 2,
         "state_name": "Tennessee",
         "county_name": "Shelby",
-        "is_contractor": true
+        "is_contractor": true,
+        "qualifications": "Construction Apprentice 3 years at DCM. Contractors License"
       }
     },
     {
@@ -52,7 +53,8 @@
         "user": 4,
         "state_name": "Tennessee",
         "county_name": "Dickson",
-        "is_contractor": true
+        "is_contractor": true,
+        "qualifications": "10 years of building custom homes LLC BrightBuilds. Contractors License"
       }
     },
     {
