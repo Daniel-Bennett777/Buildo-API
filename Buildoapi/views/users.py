@@ -37,6 +37,7 @@ class UserViewSet(viewsets.ViewSet):
                 state_name=request.data.get('state_name', ''),
                 county_name=request.data.get('county_name', ''),
                 is_contractor=request.data.get('is_contractor', False),
+                qualifications=request.data.get('qualifications', ''),
                 user=user
             )
             token, created = Token.objects.get_or_create(user=user)
@@ -55,6 +56,7 @@ class UserViewSet(viewsets.ViewSet):
                 'state_name': rare_user.state_name,
                 'county_name': rare_user.county_name,
                 'is_contractor': rare_user.is_contractor,
+                'qualifications':rare_user.qualifications
             }
 
             rare_user_serializer = RareUserSerializer(data=request.data, context={"request": request})
