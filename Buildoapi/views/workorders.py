@@ -50,6 +50,26 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
 
         serializer = WorkOrderSerializer(work_orders, many=True, context={'request': request})
         return Response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def my_buildos(self, request):
+        try:
+        # Check if the user is a contractor
+            contractor = RareUser.objects.get(user=request.user.id)
+
+            if contractor.is_contractor == True:
+                # Contractor's MyBuildos section: Show only accepted work orders
+                accepted_work_orders = WorkOrder.objects.filter(contractor=contractor).order_by('-date_posted')
+
+                for work_order in accepted_work_orders:
+                    work_order.date_posted = work_order.date_posted.strftime("%m-%d-%Y")
+
+                serializer = WorkOrderSerializer(accepted_work_orders, many=True, context={'request': request})
+                return Response(serializer.data)
+
+            return Response({"message": "Only contractors can view MyBuildos."}, status=status.HTTP_403_FORBIDDEN)
+
+        except RareUser.DoesNotExist:
+            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, pk=None):
         try:
