@@ -24,9 +24,10 @@ class StatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class WorkOrderSerializer(serializers.ModelSerializer):
-    customer = RareUserSerializer(many=False)
+    customer = RareUserSerializer(many=False, required=False)
     contractor = RareUserSerializer(many=False, required=False)
     status = StatusSerializer(many=False)
+    
 
     class Meta:
         model = WorkOrder
@@ -149,6 +150,9 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
                     work_order.save()
                     serializer = WorkOrderSerializer(work_order, context={"request": request})
                     return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+                else:
+                    print(serializer.errors)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response({"message": "You are not the author of this Order."}, status=status.HTTP_403_FORBIDDEN)
         except WorkOrder.DoesNotExist as ex:
@@ -170,6 +174,42 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response({"message": "Only contractors can accept jobs."}, status=status.HTTP_403_FORBIDDEN)
+        except WorkOrder.DoesNotExist as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+        except Status.DoesNotExist:
+            return Response({"message": "Status 'accepting-responses' not found."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    @action(detail=True, methods=['post'])
+    def mark_complete(self, request, pk=None):
+        work_order = self.get_object()
+        
+        # Check if the user making the request is the assigned contractor
+        if request.user.id != work_order.contractor.user.id:
+            return Response({"message": "You are not authorized to mark this job as complete."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Update the status to 'Complete' (you need to define this status in your models)
+        work_order.status = Status.objects.get(status='Complete')
+        work_order.save()
+
+        return Response({"message": "Job marked as complete."}, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'])
+    def decommit_work_order(self, request, pk=None):
+        try:
+            work_order = self.get_object()
+
+            # Check if the user making the request is the assigned contractor
+            if request.user.id != work_order.contractor.user.id:
+                return Response({"message": "You are not authorized to decommit this job."}, status=status.HTTP_403_FORBIDDEN)
+
+            # Update the status to 'Accepting Responses' (you need to define this status in your models)
+            work_order.status = Status.objects.get(status='accepting-responses')
+            work_order.contractor = None  # Remove the contractor assignment
+            work_order.save()
+
+            serializer = WorkOrderSerializer(work_order, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         except WorkOrder.DoesNotExist as ex:
             return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
         except Status.DoesNotExist:
