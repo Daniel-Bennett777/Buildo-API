@@ -11,4 +11,9 @@ python3 manage.py loaddata rating
 python3 manage.py loaddata status
 python3 manage.py loaddata workorders
 python3 manage.py loaddata review
+python3 manage.py loaddata request_status.json
+python3 manage.py loaddata connection_request.json
+python3 manage.py loaddata connection.json
+python3 manage.py loaddata message.json
+python3 manage.py loaddata job_request.json
 

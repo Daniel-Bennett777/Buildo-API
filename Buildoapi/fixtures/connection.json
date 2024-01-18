@@ -1,0 +1,23 @@
+
+[
+  {
+    "model": "Buildoapi.connection",
+    "pk": 1,
+    "fields": {
+      "user1": 1, 
+      "user2": 2, 
+      "user2_cellphone": "123-456-7890", 
+      "date_connected": "2023-01-02T15:00:00Z"
+    }
+  },
+  {
+    "model": "Buildoapi.connection",
+    "pk": 2,
+    "fields": {
+      "user1": 3,
+      "user2": 2,  
+      "user2_cellphone": "987-654-3210",  
+      "date_connected": "2023-01-03T11:00:00Z"
+    }
+  }
+]

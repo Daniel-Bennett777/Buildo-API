@@ -1,0 +1,23 @@
+[
+    {
+      "model": "Buildoapi.connectionrequest",
+      "pk": 1,
+      "fields": {
+        "sender": 1, 
+        "receiver": 2,  
+        "date_requested": "2023-01-02T14:00:00Z",
+        "status": 1  
+      }
+    },
+    {
+      "model": "Buildoapi.connectionrequest",
+      "pk": 2,
+      "fields": {
+        "sender": 3,
+        "receiver": 2,
+        "date_requested": "2023-01-03T10:30:00Z",
+        "status": 1 
+      }
+    }
+    
+  ]
