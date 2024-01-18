@@ -3,3 +3,8 @@ from .rating import Rating
 from .status import Status
 from .work_order import WorkOrder
 from .review import Review
+from .job_request import JobRequest
+from .connection import Connection
+from .connection_request import ConnectionRequest
+from .message import Message
+from .request_status import RequestStatus

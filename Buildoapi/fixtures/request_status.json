@@ -1,0 +1,23 @@
+[
+    {
+      "model": "Buildoapi.requeststatus",
+      "pk": 1,
+      "fields": {
+        "status": "Pending"
+      }
+    },
+    {
+      "model": "Buildoapi.requeststatus",
+      "pk": 2,
+      "fields": {
+        "status": "Accepted"
+      }
+    },
+    {
+      "model": "Buildoapi.requeststatus",
+      "pk": 3,
+      "fields": {
+        "status": "Rejected"
+      }
+    }
+]

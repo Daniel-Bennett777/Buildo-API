@@ -1,0 +1,26 @@
+[
+    {
+      "model": "Buildoapi.jobrequest",
+      "pk": 1,
+      "fields": {
+        "contractor": 2, 
+        "customer": 3, 
+        "work_order": 1, 
+        "request_status": 1, 
+        "date_requested": "2023-01-04T09:30:00Z",
+        "contractor_cellphone": "123-456-7890" 
+      }
+    },
+    {
+      "model": "Buildoapi.jobrequest",
+      "pk": 2,
+      "fields": {
+        "contractor": 4, 
+        "customer": 3, 
+        "work_order": 2,  
+        "request_status": 1,  
+        "date_requested": "2023-01-05T11:00:00Z",
+        "contractor_cellphone": "987-654-3210"  
+      }
+    }
+  ]

@@ -13,5 +13,20 @@
         "description": "This is my kitchen. Definitely outdated as you can see. We need someone experienced in Residential construction please! ",
         "profile_image_url": "https://media.istockphoto.com/id/1363882276/photo/kitchenette.jpg?s=612x612&w=0&k=20&c=u3u7r4fv67KEM7vcV5eT3ma1VmBqfjmMXz4wU-mY-Vw="
       }
+    },
+    {
+      "model": "Buildoapi.workorder",
+      "pk": 2,
+      "fields": {
+        "service_type": "Water Heater broken",
+        "state_name": "Tennessee",
+        "county_name": "Dickson",
+        "date_posted": "2023-12-06T12:00:00Z",  
+        "customer": 3,  
+        "contractor": null,
+        "status": 2, 
+        "description": "This is my water heater. it broke recently. thank you for contact information and im looking for a new unit install. ",
+        "profile_image_url": "https://img.freepik.com/free-photo/worker-repairing-water-heater_23-2149334227.jpg?size=626&ext=jpg&ga=GA1.2.1688039518.1694962551&semt=ais"
+      }
     }
-  ]
+]

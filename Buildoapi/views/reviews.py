@@ -66,56 +66,36 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer = ReviewSerializer(instance)
         return Response(serializer.data)
     def create(self, request, *args, **kwargs):
-            work_order_id = request.data.get('work_order_id')
-            contractor_id = request.data.get('contractor_id')  # Add this line to get the contractor_id from the request data
+        print('Received Request Data:', request.data)
+        try:
+            contractor_id = request.data.get('contractorId')
+        # Check if contractor_id is not None before using it
+            if contractor_id is not None:
+                # Process the contractor information
+                contractor = RareUser.objects.get(id=contractor_id)
+                # Rest of your create method...
+        except RareUser.DoesNotExist:
+            return Response({'message': 'Contractor not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Use the new action to check if the review is allowed
-            response = self.can_review_contractor(request)
-            can_review = response.data.get('can_review', False)
-            work_order_id = response.data.get('work_order_id')
-
-            if not can_review:
-                return Response({'message': 'Cannot review this contractor.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Get the authenticated user
-            authenticated_user = RareUser.objects.get(user=request.user.id)
-
-            # Check if the customer has already reviewed the contractor
-            existing_review = Review.objects.filter(
-                customer=authenticated_user,
-                contractor__id=contractor_id
-            ).exists()
-
-            if existing_review:
-                return Response({'message': 'You have already reviewed this contractor.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Use the work_order_id to retrieve the work_order
-            work_order = WorkOrder.objects.get(pk=work_order_id)
-
-            # Use these values to create the review
-            Review.objects.create(
-                customer=authenticated_user,
-                contractor=work_order.contractor,
-                rating=request.data.get('rating'),
-                comment=request.data.get('comment'),
-                profile_image_url=request.data.get('profile_image_url'),
-            )
-
-            return Response({'message': 'Review created successfully.'}, status=status.HTTP_201_CREATED)
-    @action(detail=False, methods=['get'])
-    def can_review_contractor(self, request):
-        contractor_id = request.query_params.get('contractor_id')
+        # Get the authenticated user
         authenticated_user = RareUser.objects.get(user=request.user.id)
 
-        try:
-            work_order = WorkOrder.objects.filter(
-                customer=authenticated_user,
-                contractor__id=contractor_id,
-                status__status__in=['in-progress', 'Complete']
-            ).latest('date_posted')
+        # Check if the customer has already reviewed the contractor
+        existing_review = Review.objects.filter(
+            customer=authenticated_user,
+            contractor__id=contractor_id
+        ).exists()
 
-            print("Can review: True")
-            return Response({'can_review': True, 'work_order_id': work_order.id})
-        except WorkOrder.DoesNotExist:
-            print("Can review: False")
-            return Response({'can_review': False, 'work_order_id': None})
+        if existing_review:
+            return Response({'message': 'You have already reviewed this contractor.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Use these values to create the review
+        Review.objects.create(
+            customer=authenticated_user,
+            contractor=RareUser.objects.get(id=contractor_id),
+            comment=request.data.get('comment'),
+            rating=Rating.objects.get(value=request.data.get('rating')),
+            profile_image_url=request.data.get('profile_image_url'),
+        )
+
+        return Response({'message': 'Review created successfully.'}, status=status.HTTP_201_CREATED)
