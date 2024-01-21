@@ -10,3 +10,4 @@ class JobRequest(models.Model):
     request_status = models.ForeignKey(RequestStatus, on_delete=models.CASCADE)
     date_requested = models.DateTimeField(auto_now_add=True)
     contractor_cellphone = models.CharField(max_length=20)  # Add the field for contractor's cellphone number
+    accepted_by_customer = models.BooleanField(default=False)
