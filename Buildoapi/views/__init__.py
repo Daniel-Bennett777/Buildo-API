@@ -3,3 +3,4 @@ from .rareusers import RareUserSerializer
 from .workorders import WorkOrderViewSet
 from .reviews import ReviewViewSet
 from .contractors import ContractorViewSet
+from .job_requests import JobRequestViewSet

@@ -157,27 +157,6 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             return Response({"message": "You are not the author of this Order."}, status=status.HTTP_403_FORBIDDEN)
         except WorkOrder.DoesNotExist as ex:
             return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
-    @action(detail=True, methods=['post'])
-    @permission_classes([IsContractor])
-    def accept_job(self, request, pk=None):
-        try:
-            work_order = WorkOrder.objects.get(pk=pk)
-            contractor = RareUser.objects.get(user=request.user.id)
-
-            if contractor.is_contractor is True:  # Ensure the job is not already accepted
-                work_order.contractor = contractor
-                in_progress_status = Status.objects.get(status='in-progress') # Update the status
-                work_order.status = in_progress_status
-                work_order.save()
-
-                serializer = WorkOrderSerializer(work_order, context={'request': request})
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response({"message": "Only contractors can accept jobs."}, status=status.HTTP_403_FORBIDDEN)
-        except WorkOrder.DoesNotExist as ex:
-            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
-        except Status.DoesNotExist:
-            return Response({"message": "Status 'accepting-responses' not found."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     @action(detail=True, methods=['post'])
     def mark_complete(self, request, pk=None):
