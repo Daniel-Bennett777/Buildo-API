@@ -5,6 +5,7 @@ from Buildoapi.views.workorders import WorkOrderViewSet
 from Buildoapi.views.reviews import ReviewViewSet
 from Buildoapi.views.contractors import ContractorViewSet
 from Buildoapi.views.job_requests import JobRequestViewSet
+from Buildoapi.views.connections import ConnectionRequestViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -12,6 +13,7 @@ router.register(r'work_orders', WorkOrderViewSet,"work_order")
 router.register(r'reviews', ReviewViewSet,'review')
 router.register(r'contractors_list', ContractorViewSet, basename='contractors')
 router.register(r'job_requests', JobRequestViewSet, basename='job-requests')
+router.register(r'connection_requests', ConnectionRequestViewSet, basename='connection_requests')
 
 urlpatterns = [
     path('', include(router.urls)),
