@@ -5,7 +5,7 @@ from Buildoapi.views.workorders import WorkOrderViewSet
 from Buildoapi.views.reviews import ReviewViewSet
 from Buildoapi.views.contractors import ContractorViewSet
 from Buildoapi.views.job_requests import JobRequestViewSet
-from Buildoapi.views.connections import ConnectionRequestViewSet
+from Buildoapi.views.connection_request import ConnectionRequestViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash=False)
