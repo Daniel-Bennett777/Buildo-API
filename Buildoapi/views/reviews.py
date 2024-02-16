@@ -62,9 +62,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return Response(response_data)
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = ReviewSerializer(instance)
-        return Response(serializer.data)
+        try:
+            instance = self.get_object()
+            serializer = ReviewSerializer(instance)
+            return Response(serializer.data)
+        except Review.DoesNotExist:
+            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
     def create(self, request, *args, **kwargs):
         print('Received Request Data:', request.data)
         try:

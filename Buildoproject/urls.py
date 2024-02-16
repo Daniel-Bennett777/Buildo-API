@@ -20,6 +20,7 @@ urlpatterns = [
     path('register/', UserViewSet.as_view(
         {'post': 'register_account'}), name='register'),
     path('login/', UserViewSet.as_view({'post': 'login_user'}), name='login'),
+    path('reviews/<int:contractorId>/', ReviewViewSet.as_view({'get': 'list'}), name='reviews-contractor'),
 ]
 
 
