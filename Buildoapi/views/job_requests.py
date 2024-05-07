@@ -58,3 +58,19 @@ class JobRequestViewSet(viewsets.ModelViewSet):
 
         except JobRequest.DoesNotExist as ex:
             return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+    @action(detail=True, methods=['post'])
+    def cancel_request(self, request, pk=None):
+        try:
+            job_request = JobRequest.objects.get(pk=pk)
+
+            # Check if the user making the request is the assigned contractor
+            if request.user.id != job_request.contractor.user.id:
+                return Response({"message": "You are not authorized to cancel this job request."}, status=status.HTTP_403_FORBIDDEN)
+
+            # Cancel the job request
+            job_request.delete()
+
+            return Response({"message": "Job request canceled successfully."}, status=status.HTTP_200_OK)
+
+        except JobRequest.DoesNotExist as ex:
+            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)

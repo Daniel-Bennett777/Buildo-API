@@ -7,3 +7,5 @@ Technologies Used Python Django orm React Tailwind Postman
 Stretch Goals In addition to the core features, BuilDO aims to implement a User Messaging System as a stretch goal. This feature will enable users to communicate freely with contractors or customers, fostering better collaboration. Users will also receive notifications for new messages, ensuring they stay informed and engaged throughout the service process.
 
 BuilDO represents a sophisticated solution to the challenges of connecting customers and contractors, offering a user-friendly experience backed by cutting-edge technologies.
+
+Buildo Is committed to excellence and wants to see a world where Customers always have access to a builder, or handyman to get the job done and done quickly. 
