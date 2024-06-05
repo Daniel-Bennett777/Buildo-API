@@ -91,13 +91,12 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
         """
     
         try:
-            # Extract data from the request
+                # Extract data from the request
             data = {
                 "service_type": request.data.get("service_type"),
                 "state_name": request.data.get("state_name"),
                 "county_name": request.data.get("county_name"),
                 "description": request.data.get("description"),
-                "profile_image_url": request.data.get("profile_image_url"),
                 "status": Status.objects.get(id=request.data.get("status"))
                 # Add other fields as needed
             }
@@ -105,8 +104,11 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             rare_user = RareUser.objects.get(user=request.user.id)
             data["customer"] = rare_user  # Assign the RareUser instance directly
 
+            # Handle the file upload for profile_image
+            profile_image = request.FILES.get('profile_image')
+
             # Create a WorkOrder instance
-            work_order = WorkOrder.objects.create(**data)
+            work_order = WorkOrder.objects.create(profile_image=profile_image, **data)
 
             # Serialize the instance
             serializer = WorkOrderSerializer(work_order)
