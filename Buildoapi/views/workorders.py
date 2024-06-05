@@ -32,6 +32,9 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkOrder
         fields = '__all__'
+        extra_kwargs = {
+            'profile_image': {'required': False}
+        }
 
 class WorkOrderViewSet(viewsets.ModelViewSet):
     queryset = WorkOrder.objects.all()
