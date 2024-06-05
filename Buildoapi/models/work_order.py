@@ -11,7 +11,7 @@ class WorkOrder(models.Model):
     contractor = models.ForeignKey(RareUser, on_delete=models.SET_NULL, null=True,blank=True, related_name='contractor_order')
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     description = models.TextField()
-    profile_image_url = models.URLField(max_length=355) 
+    profile_image = models.ImageField(upload_to='work_order_images/', null=True, blank=True)
 
     def set_in_progress_status(self):
         in_progress_status = Status.objects.get(status='in-progress')
