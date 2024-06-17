@@ -4,3 +4,5 @@
 
 ## Backend note on june 5th 2024 - adding in features on front end for this backend feature. Log and serve on this date for testing. 
  
+
+## backend notes logging in on june 19th ready to continue the uploading of a photo feature. 
