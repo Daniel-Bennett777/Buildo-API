@@ -84,54 +84,45 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             return Response({"message": "Work order not found"}, status=status.HTTP_404_NOT_FOUND)
  
     def create(self, request):
-        """Handle POST operations
+            try:
+                # Extract and validate data from the request
+                service_type = request.data.get("service_type")
+                state_name = request.data.get("state_name")
+                county_name = request.data.get("county_name")
+                description = request.data.get("description")
+                status_id = request.data.get("status")
 
-        Returns
-            Response -- JSON serialized work order instance
-        """
-    
-        try:
-                # Extract data from the request
-            data = {
-                "service_type": request.data.get("service_type"),
-                "state_name": request.data.get("state_name"),
-                "county_name": request.data.get("county_name"),
-                "description": request.data.get("description"),
-                "status": Status.objects.get(id=request.data.get("status"))
-                # Add other fields as needed
-            }
+                if not (service_type and state_name and county_name and description and status_id):
+                    return Response({"message": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
 
-            rare_user = RareUser.objects.get(user=request.user.id)
-            data["customer"] = rare_user  # Assign the RareUser instance directly
+                status_instance = Status.objects.get(id=status_id)
+                rare_user = RareUser.objects.get(user=request.user.id)
 
-            # Handle the file upload for profile_image
-            profile_image = request.FILES.get('profile_image')
+                profile_image = request.FILES.get('profile_image')
+                if not profile_image:
+                    return Response({"message": "Profile image is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Create a WorkOrder instance
-            work_order = WorkOrder.objects.create(profile_image=profile_image, **data)
+                # Create a WorkOrder instance
+                work_order = WorkOrder.objects.create(
+                    service_type=service_type,
+                    state_name=state_name,
+                    county_name=county_name,
+                    description=description,
+                    status=status_instance,
+                    customer=rare_user,
+                    profile_image=profile_image
+                )
 
-            # Serialize the instance
-            serializer = WorkOrderSerializer(work_order)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                # Serialize the instance
+                serializer = WorkOrderSerializer(work_order)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        except Exception as ex:
-            return Response({"message": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
-    def destroy(self,request, pk=None):
-        """Handle DELETE requests for a single post
-
-        Returns:
-            Response -- empty response body
-        """
-        try:
-            work_order = WorkOrder.objects.get(pk=pk)
-            if work_order.customer.user_id == request.user.id:
-                work_order.delete()
-                return Response(None, status=status.HTTP_204_NO_CONTENT)
-            return Response({"message": "You are not the author of this post."}, status=status.HTTP_403_FORBIDDEN)
-        except WorkOrder.DoesNotExist as ex:
-            return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as ex:
-            return Response({"message": ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except Status.DoesNotExist:
+                return Response({"message": "Invalid status ID."}, status=status.HTTP_400_BAD_REQUEST)
+            except RareUser.DoesNotExist:
+                return Response({"message": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as ex:
+                return Response({"message": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
     def update(self,request, pk=None):
         """Handle PUT requests for a single post
 
