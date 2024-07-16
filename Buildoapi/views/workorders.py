@@ -189,3 +189,29 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
         except Status.DoesNotExist:
             return Response({"message": "Status 'accepting-responses' not found."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    @action(detail=True, methods=['patch'], url_path='add-profile-picture')
+    def add_profile_picture(self, request, pk=None):
+        try:
+            work_order_instance = WorkOrder.objects.get(pk=pk)
+        except WorkOrder.DoesNotExist:
+            return Response({'error': 'Work Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        profile_image = request.FILES.get('profile_image')
+
+        if profile_image:
+            work_order_instance.profile_image = profile_image
+            work_order_instance.save()
+            serializer = WorkOrderSerializer(work_order_instance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Profile image data not provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["get"], url_path="profile-picture")
+    def get_profile_picture(self, request, pk=None):
+        try:
+            work_order_instance = WorkOrder.objects.get(pk=pk)
+        except WorkOrder.DoesNotExist:
+            return Response({"error": "Work Order not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        profile_picture_url = work_order_instance.profile_image.url if work_order_instance.profile_image else None
+        return Response({"profile_picture": profile_picture_url}, status=status.HTTP_200_OK)
