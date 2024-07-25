@@ -5,4 +5,5 @@
 ##YES
 ## planning to continue my work on this tomrrow lets go! 
 ##yes
-# still using re renders 
+# still using re renders
+# #check in 7-24-24 
